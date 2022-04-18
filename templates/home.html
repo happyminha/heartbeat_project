@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  background-color: #2C3338;
+  font-family: segoe ui;
+  font-size: 100%;
+  height: 100%;
+}
+
+/* ****************************************************
+                        CONTENEDOR
+******************************************************/
+.container {
+  background-color: #2C3338;
+<!--  background: url("https://subtlepatterns.com/patterns/ricepaper.png");-->
+<!--  min-height: 100%;-->
+<!--  overflow: auto;-->
+}
+
+/* ENLACES */
+a {
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  padding: 1rem 1.5rem;
+  text-decoration: none;
+  transition: background-color .16s ease-in;
+}
+
+a:hover {
+  background-color: #CD5C5C;
+}
+
+/* **************************************************
+        BARRA DE NAVEGACION Y MENU NORMAL
+****************************************************/
+/* Barra de navegacion (contiene al nav mini menu) */
+.navbar-menu {
+  background-color: #606468;
+  margin: 2% auto;
+  max-width: 1000px;
+  width: calc(100%);
+}
+
+/* Menu */
+.navbar-menu .menu {
+  display: block;
+  text-align: center;
+}
+
+/* List items*/
+.navbar-menu .menu li {
+  display: inline-block;
+}
+
+/* Cuando se haga hover sobre el item el submenu se activa
+ en caso tuviese */
+.navbar-menu .menu li:hover > .submenu {
+  display: block;
+  -webkit-animation-name: showSubMenu;
+  -webkit-animation-duration: .4s;
+}
+
+/* Submenus*/
+.navbar-menu .menu li ul {
+  background-color: #606468;
+  display: none;
+  position: absolute;
+}
+
+/* List items de submenus */
+.navbar-menu .menu li ul li {
+  display: block;
+}
+
+.navbar-menu .menu li ul li a:active {
+  -webkit-animation-name: hideSubMenu;
+  -webkit-animation-duration: .4s;
+}
+
+/******************************************************
+                        MINI MENU
+******************************************************/
+/* Mini menu */
+.navbar-mini-menu {
+  background-color: #606468;
+  display: none;
+}
+
+/* Bloque que tiene el boton para desplegar el mini menu */
+.navbar-mini-menu .menu-select {
+  color: #fff;
+  padding: 1rem 1.5rem;
+}
+
+/* Span que contiene el icono*/
+.navbar-mini-menu .menu-select .btn-select {
+  background: url("https://imgur.com/VbcTojM.png") no-repeat;
+  cursor: pointer;
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  right: 10px;
+  top: 10px;
+}
+
+/* Lista del mini menu */
+.navbar-mini-menu .mini-menu-options {
+  display: block;
+}
+
+/* Items del mini menu */
+.navbar-mini-menu .mini-menu-options li {
+  display: block;
+}
+
+/* Submenus de los items del mini menu */
+.navbar-mini-menu .mini-menu-options li .submenu {
+  display: none;
+}
+
+.navbar-mini-menu .mini-menu-options li:focus {
+  outline: 0;
+}
+
+.navbar-mini-menu .mini-menu-options li:focus > .submenu {
+  display: block;
+  -webkit-animation-name: showSubMenu;
+  -webkit-animation-duration: .4s;
+}
+
+/* Enlaces del mini menu */
+.navbar-mini-menu .mini-menu-options li a {
+  display: block;
+  padding: 1rem 1.5rem;
+}
+
+/* ***************************************************
+                      ANIMACIONES
+*****************************************************/
+@-webkit-keyframes showSubMenu {
+    0% {
+      transform: scale(0,0);
+    }
+  100% {
+    transform: scale(1,1);
+  }
+}
+
+@-webkit-keyframes hideSubMenu {
+  0% {
+    transform: scale(1,1);
+  }
+  100% {
+    transform: scale(0,0);
+  }
+}
+
+/*****************************************************                       MEDIAQUERIES
+*****************************************************/
+@media screen and (max-width: 750px) {
+  /* Elimina los margenes al nav */
+  .navbar-menu {
+    margin: 0;
+  }
+
+  /* Esconde el menu normal */
+  .navbar-menu .menu {
+    display: none;
+  }
+
+  /* Muestra el mini menu */
+  .navbar-mini-menu {
+    display: block;
+  }
+
+  /* Esconde la lista del mini menu */
+  .navbar-mini-menu .mini-menu-options {
+    display: none;
+  }
+
+}
+    </style>
+    <script>
+        $(document).on("ready",function() {
+  // 0 = oculto, 1 = visible
+  var menuState = 0;
+  //if($(".mini-menu-options").is(":hidden")) {
+    /* Agrega un listener del evento Click a btn-select */
+    $(".btn-select").on("click",function() {
+      if(menuState === 0) {
+        $(".mini-menu-options").slideDown("slow");
+        menuState = 1;
+      } else {
+        $(".mini-menu-options").slideUp("slow");
+        menuState = 0;
+      }
+    });
+  //}
+  // Si el enlace actual (li) tiene mas de 1 hijo, es decir
+  // su enlace (a) y ademas un submenu (ul)
+  $(".mini-menu-options li").on("click", function() {
+    var numHijos = $(this).children().length;
+    if(numHijos < 2) {
+      // esconde el menu
+      $(".mini-menu-options").hide("fast");
+      // obtiene el texto del elemento elegido
+      var texto = $(this).text();
+      // y lo agrega a la barra del menu
+      $(".menu-select .menu-actual").text(texto);
+    }
+    menuState = 0; // reinicia la variable que controla el menu
+  });
+});
+    </script>
+</head>
+<body>
+<main class="container">
+    <header>
+        <nav class="navbar-menu">
+            <ul class="menu">
+                {% if 'id' in session %}
+                <li><a>{{session.id}}님 로그인 성공</a></li>
+                <li><a href="/member/logout">로그아웃</a></li>
+                {% else %}
+                <li><a href="/member/login">로그인</a></li>
+                {% endif %}
+                <li><a>내 정보</a>
+                    <ul class="submenu two">
+                        <li><a href="/member/getmember">내정보 확인</a></li>
+                        <li><a href="/rental/mylist">나의 대여 내역 확인</a></li>
+                    </ul>
+                </li>
+                <li><a>대여하기</a>
+                    <ul class="submenu three">
+                        <li><a href="/rental/list">전체 대여 현황 확인</a></li>
+                        <li><a href="/heart/">지역별 자동심박동기 확인</a></li>
+                        <li><a href="/heart/marker">내 근처 자동심박동기 위치 지도로 보기</a></li>
+                        <li><a href="/heart/getorg">설치 기관명으로 검색</a></li>
+                    </ul>
+                </li>
+<!--                <li><a>Menu 3</a>-->
+<!--                    <ul class="submenu four">-->
+<!--                      <li><a href="/rental/list">전체 대여확인</a></li>-->
+<!--                      <li><a>SubMenu 2</a></li>-->
+<!--                    </ul>-->
+<!--                </li>-->
+                <li><a>조원 소개</a>
+                    <ul class="submenu five">
+                        <li><a>김민하</a></li>
+                        <li><a>김희택</a></li>
+                        <li><a>정윤주</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- Mini Menu -->
+            <nav class="navbar-mini-menu">
+                <div class="menu-select">
+          <span class="menu-actual">
+            Menu
+          </span>
+                    <span class="btn-select">
+
+          </span>
+                </div>
+                <ul class="mini-menu-options">
+                    <li><a>Home</a></li>
+                    <li tabIndex="0"><a>Menu 1</a></li>
+                    <li tabIndex="0"><a>Menu 2</a>
+                        <ul class="submenu five">
+                            <li><a>Submenu 1</a></li>
+                            <li><a>Submenu 2</a></li>
+                        </ul>
+                    </li>
+                    <li tabIndex="0"><a>Menu 3</a></li>
+                    <li tabIndex="0"><a>About</a>
+                        <ul class="submenu five">
+                            <li><a>Contact me</a></li>
+                            <li><a>About me</a></li>
+                        </ul>
+                    </li>
+
+                </ul> <!-- Fin lista mini menu -->
+            </nav> <!-- Fin mini menu -->
+
+        </nav> <!-- Fin menu general (nav) -->
+    </header>
+</main>
+</body>
+</html>
