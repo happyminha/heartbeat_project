@@ -1,5 +1,5 @@
 # https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-category
-# 카카와 개발 가이드..?
+# 카카오 개발 가이드
 
 # 카카오맵 api key
 # bb08ed24532efc695296b299586fd991
